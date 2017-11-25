@@ -58,6 +58,7 @@ RUN cd hello && \
 WORKDIR /build/llvm-mingw
 
 # Build libunwind/libcxxabi/libcxx
+COPY patches/libunwind-*.patch ./patches/
 COPY build-libcxx.sh merge-archives.sh ./
 RUN ./build-libcxx.sh $TOOLCHAIN_PREFIX
 

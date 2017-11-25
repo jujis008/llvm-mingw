@@ -1,0 +1,35 @@
+From 3ffd36a82f674431183019f2cab662d4ff9d0b7d Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Thu, 25 Jan 2018 23:01:25 +0200
+Subject: [PATCH] Don't enable _LIBUNWIND_BUILD_ZERO_COST_APIS if building the
+ SJLJ APIs
+
+Otherwise, a shared library build with SJLJ APIs enabled would
+end up with duplicate symbols.
+
+This didn't occur for the apple && arm case due to specifically
+checking for that in the surrounding ifdef.
+
+Differential Revision: https://reviews.llvm.org/D42555
+---
+ src/config.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/config.h b/src/config.h
+index 0b300db..1a7a306 100644
+--- a/src/config.h
++++ b/src/config.h
+@@ -72,8 +72,10 @@
+     (!defined(__APPLE__) && defined(__arm__)) ||                               \
+     (defined(__arm64__) || defined(__aarch64__)) ||                            \
+     defined(__mips__)
++#if !defined(_LIBUNWIND_BUILD_SJLJ_APIS)
+ #define _LIBUNWIND_BUILD_ZERO_COST_APIS
+ #endif
++#endif
+ 
+ #if defined(__powerpc64__) && defined(_ARCH_PWR8)
+ #define PPC64_HAS_VMX
+-- 
+2.7.4
+
