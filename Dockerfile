@@ -57,6 +57,8 @@ RUN cd hello && \
 
 WORKDIR /build/llvm-mingw
 
+ENV TOOLCHAIN_ARCHS="x86_64"
+
 # Build libunwind/libcxxabi/libcxx
 COPY patches/libunwind-*.patch ./patches/
 COPY build-libcxx.sh merge-archives.sh ./
